@@ -1,7 +1,9 @@
 // TODO: insert location where samples can be retreived 
+(
 ~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/twosecondhold");
-~clean.loadSoundFiles("/home/bartleby/music/samples/harmonica/special20/c/wah");
-~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/twosecondhold");
+~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/wah");
+~clean.loadSoundFiles("~/music/samples/fieldrecordings/metro");
+)
 
 
 // This material was inspired by the effort to create sound using only my Special 20 Harmonica in the key of C.
@@ -10,6 +12,24 @@
 
 // Pdef's with visual imagery commented before it represent material inspired by footage I was provided by a friend to act as accompanying material.
 
+Pdef(\001).play;
+Pdef(\001).stop;
+
+Pdef(\004).play;
+Pdef(\004).stop;
+
+(
+Pdef(\005).stop;
+Pdef(\001).stop;
+Pdef(\004).stop;
+)
+
+(
+Pdef(\005).play;
+Pdef(\001).play;
+Pdef(\004).stop;
+)
+
 // very light
 (
 Pdef(\001,
@@ -17,16 +37,38 @@ Pdef(\001,
         type: \cln,
         snd: \twosecondhold,
         num: Pseq([0,1,2,3,5], inf),
+	scale: Scale.harmonicMinor,
+	degree: -8, // switch to -8 after train passes
         dur: Pwrand([1/Pstutter(4, Pseq([12,16,20], inf)), Rest(1/8)], [1,1].normalizeSum, inf),
-        // lpf: Pexprand(200,1000),
-        lpf: Pseq([Pseries(100,2,200)], inf),
+        lpf: Pseq([Pseries(150,2,100), Pseries(350, -2, 100)], inf).trace,
         hpf: Pkey(\lpf),
         dlf: 0.94,
         crv: -8,
-        amp: Pstutter(20,Pexprand(3,4)),
+	amp: 1.3,
 	spd: 1,
     ])
 );
+
+Pdef(\004,
+    Pbind(*[
+        type: \cln,
+        snd: \metro,
+	dur: 110,
+	amp: 11, // it's kinda quite
+     ])
+).play(quant:1);
+
+Pdef(\005,
+    Pbind(*[
+        type: \cln,
+        snd: \metro,
+	bgn: 0.55,
+	end: 0.9,
+	dur: 43,
+	amp: 11, // it's kinda quite
+     ])
+);
+
 
 // fire blazin' on a monitor
 Pdef(\002,
@@ -68,7 +110,6 @@ Pdef(\003,
 );
 );
 
-);
 
 
 
