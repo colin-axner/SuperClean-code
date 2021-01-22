@@ -19,6 +19,7 @@ Pdef(\001,
         snd: \011821,
         num: 9,
 	dur: 1/3, 
+
 	dst: 0.005,
 	amp: 0.3, 
 	scale: Scale.harmonicMinor, 
