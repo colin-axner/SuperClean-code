@@ -1,34 +1,91 @@
 (
 ~clean.loadSoundFiles("~/music/samples/guitar");
 ~clean.loadSoundFiles("~/music/samples/percussion/singingbowl");
-~clean.loadSoundFiles("~/music/samples/percussion/tamborine");
 ~clean.loadSoundFiles("~/music/samples/voice");
+~clean.loadSoundFiles("~/music/samples/voice2");
 ~clean.loadSoundFiles("~/music/samples/fieldrecordings/metro");
 )
 
 /* 
     Inspired by the greyness of my life during covid. 
+	001 Opening meditation bell
+	002 The repetition of unconscious thought (the driftin' mind)
+	003 The greyness of covid and the mild tranquility of my mind
+	004 "I call tell time passes because the bus continues to come and go"  
+	005 Attempts of concentration subverted by the anxious awaiting of the end
+	006 The bell has sounded, time to reopen the eyes
 */
 
-Pdef(\002).play; // grey
-Pdef(\010).play; // ibc
+Pdef(\001).play; // meditation
+Pdef(\00200).play; // ibc
+Pdef(\002).play; // ibc
+Pdef(\003).play; // grey
 Pdef(\004).play; // metro
-Pdef(\005).play; // singing bowl
-Pdef(\004).stop; // metro
+Pdef(\005).play; // attempts of concentration
 
+// end early
+Pdef(\003).stop; // metro
 
 // end
 (
-Pdef(\010).stop;
-Pdef(\012).play;
 Pdef(\002).stop;
+Pdef(\006).play;
+Pdef(\003).stop;
 Pdef(\004).stop;
 )
 
+(
+// attempts of concentration
+Pdef(\001,
+    Pbind(*[
+        type: \cln,
+        snd: \singingbowl,
+        num: Pseq([0], 1),
+	dur: 2,
+	amp: 1.5, 
+	spd: 0.3, 
+    ])
+);
+
+// the interblockchain communication protocol is an end to end connection orientated 
+// https://media.githubusercontent.com/media/cosmos/ics/master/papers/2020-05/build/paper.pdf
+// record yourself reading the first few pages and insert the recording below.
+Pdef(\00200,
+    Pbind(*[
+        type: \cln,
+        snd: \voice2,
+        num: 0,
+	//dur: Pseq([15], 1),
+	dur: 60, 
+	amp: 1, 
+	bgn: 0.001,
+	pan: 0, 
+	cut: 0.85, 
+	spd: 0.70782, 
+    ])
+);
+
+
+// the interblockchain communication protocol is an end to end connection orientated 
+// https://media.githubusercontent.com/media/cosmos/ics/master/papers/2020-05/build/paper.pdf
+// record yourself reading the first few pages and insert the recording below.
+Pdef(\002,
+    Pbind(*[
+        type: \cln,
+        snd: \voice,
+        num: 0,
+	dur: 10,
+	bgn: Pexprand(0.01, 1.00).trace,
+	amp: Pexprand(0.5, 1.0), 
+	pan: 0, 
+	cut: 0.85, 
+	spd: Pexprand(0.5, 1.5), 
+    ])
+);
 
 // foundation of greyness
-(
-Pdef(\002,
+// it sounds best if you use this SuperClean commit 681c0c22fbdda76d04e60ffb1f270046ad3f3ee1
+Pdef(\003,
     Pbind(*[
         type: \cln,
         snd: \guitar,
@@ -44,37 +101,6 @@ Pdef(\002,
     ])
 );
 
-// the interblockchain communication protocol is an end to end connection orientated 
-// https://media.githubusercontent.com/media/cosmos/ics/master/papers/2020-05/build/paper.pdf
-// record yourself reading the first few pages and insert the recording below.
-Pdef(\010,
-    Pbind(*[
-        type: \cln,
-        snd: \voice,
-        num: 0,
-	dur: 10,
-	bgn: Pexprand(0.01, 1.00).trace,
-	amp: Pexprand(0.5, 1.0), 
-	pan: 0, 
-	cut: 0.85, 
-	spd: Pexprand(0.5, 1.5), 
-    ])
-);
-
-
-
-// attempts of concentration
-Pdef(\005,
-    Pbind(*[
-        type: \cln,
-        snd: \singingbowl,
-        num: Pseq([0], 1),
-	dur: 2,
-	amp: 1.5, 
-	spd: -0.3, 
-    ])
-);
-
 // attempts of equanimity 
 Pdef(\004,
     Pbind(*[
@@ -86,22 +112,20 @@ Pdef(\004,
      ])
 );
 
-Pdef(\006,
+// attempts of concentration reversed
+Pdef(\005,
     Pbind(*[
         type: \cln,
-        snd: \tamborine,
-        num: Pseq([1], 1),
-	dur: 10,
-	amp: 1, 
-	pan: 1, 
-	spd: 1, 
+        snd: \singingbowl,
+        num: Pseq([0], 1),
+	dur: 2,
+	amp: 1.5, 
+	spd: -0.3, 
     ])
 );
 
-
-
 // ending
-Pdef(\012,
+Pdef(\006,
     Pbind(*[
         type: \cln,
         snd: \voice,
