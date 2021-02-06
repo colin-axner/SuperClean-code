@@ -17,14 +17,17 @@
 */
 
 Pdef(\001).play; // meditation
-Pdef(\00200).play; // ibc
+Pdef(\001).stop; // meditation
 Pdef(\002).play; // ibc
 Pdef(\003).play; // grey
 Pdef(\004).play; // metro
 Pdef(\005).play; // attempts of concentration
+Pdef(\005).play; // attempts of concentration
+
 
 // end early
-Pdef(\003).stop; // metro
+Pdef(\004).stop; // metro
+Pdef(\002).stop;
 
 // end
 (
@@ -46,26 +49,9 @@ Pdef(\001,
 	spd: 0.3, 
     ])
 );
+)
 
-// the interblockchain communication protocol is an end to end connection orientated 
-// https://media.githubusercontent.com/media/cosmos/ics/master/papers/2020-05/build/paper.pdf
-// record yourself reading the first few pages and insert the recording below.
-Pdef(\00200,
-    Pbind(*[
-        type: \cln,
-        snd: \voice2,
-        num: 0,
-	//dur: Pseq([15], 1),
-	dur: 60, 
-	amp: 1, 
-	bgn: 0.001,
-	pan: 0, 
-	cut: 0.85, 
-	spd: 0.70782, 
-    ])
-);
-
-
+(
 // the interblockchain communication protocol is an end to end connection orientated 
 // https://media.githubusercontent.com/media/cosmos/ics/master/papers/2020-05/build/paper.pdf
 // record yourself reading the first few pages and insert the recording below.
@@ -75,10 +61,10 @@ Pdef(\002,
         snd: \voice,
         num: 0,
 	dur: 10,
-	bgn: Pexprand(0.01, 1.00).trace,
+	bgn: Pexprand(0.1, 1.00).trace,
 	amp: Pexprand(0.5, 1.0), 
 	pan: 0, 
-	cut: 0.85, 
+	legato: 1, 
 	spd: Pexprand(0.5, 1.5), 
     ])
 );
@@ -134,11 +120,9 @@ Pdef(\006,
 	bgn: 0.49178910461703,
 	amp: Pexprand(0.6, 1.0), 
 	pan: 0, 
-	cut: 0.85, 
+	legato: 1, 
 	spd: 1, 
     ])
 );
 )
-
-
 
