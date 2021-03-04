@@ -13,7 +13,6 @@ Pdef(\001).play;
 Pdef(\001).stop; 
 
 (
-
 // dynamic sampling?
 //
 // The initial idea is creating the ability to play through
@@ -31,11 +30,14 @@ Pdef(\001,
 	snd: \mmd,
 	num: 12, 
 
-	total: 10, // total file length in seconds
+	total: 1/10, // total file length in seconds
 
-	dur: 1, 
-	increment: (Pkey(\dur)/Pkey(\total)), 
-	bgn: Pseries(0, Pkey(\increment), 1/Pkey(\increment)), 
+	dur: 1/100, 
+
+	bgn: 0,  
+//	test: ((Pkey(\total)/Pkey(\dur)).round).trace, // use for Pseries repeats argument, doesn't work as decimal
+	bgn: Pseq([Pseries(0, Pkey(\dur), 100).trace], inf), 
+//	legato: 1, 
 ])
-);
+).play;
 )
