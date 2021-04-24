@@ -1,126 +1,67 @@
-// TODO: insert location where samples can be retreived 
+// I will try to make all my samples accessible someday, for now, some are hosted 
+// in the samples directory in this repository.
 (
-~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/twosecondhold");
-~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/wah");
-~clean.loadSoundFiles("~/music/samples/fieldrecordings/metro");
+~clean.loadSoundFiles("~/music/samples/harmonica/marineband/a/cross")
 )
 
+/*
+    Wanted to go back to playing with harmonica sounds. Using my modified marine band A harp. 
+    Marine bands use wooden combs so it has a distinctive sound. I also retuned mine from A
+    minor to A major. Some of my notes are probably out of tune. 
+*/ 
 
-// This material was inspired by the effort to create sound using only my Special 20 Harmonica in the key of C.
-// This was apart of a compositional challenge intended to encourage the exploration of the harmonica in as many ways 
-// as I could. 
-
-// Pdef's with visual imagery commented before it represent material inspired by footage I was provided by a friend to act as accompanying material.
-
-Pdef(\001).play;
-Pdef(\001).stop;
-
-Pdef(\004).play;
-Pdef(\004).stop;
+// Controllers
+Pdef(\001).play(quant:1); 
+Pdef(\001).stop; 
 
 (
-Pdef(\005).stop;
-Pdef(\001).stop;
-Pdef(\004).stop;
-)
 
-(
-Pdef(\005).play;
-Pdef(\001).play;
-Pdef(\004).stop;
-)
+~rps = Pseq([1/2, 1/3, 1/6], inf).asStream;
 
-// very light
-(
-Pdef(\001,
+Pdef(\001, 
     Pbind(*[
-        type: \cln,
-        snd: \twosecondhold,
-        num: Pseq([0,1,2,3,5], inf),
-	scale: Scale.harmonicMinor,
-	degree: -8, // switch to -8 after train passes
-        dur: Pwrand([1/Pstutter(4, Pseq([12,16,20], inf)), Rest(1/8)], [1,1].normalizeSum, inf),
-        lpf: Pseq([Pseries(150,2,100), Pseries(350, -2, 100)], inf).trace,
-        hpf: Pkey(\lpf),
-        dlf: 0.94,
-        crv: -8,
-	amp: 1.3,
-	spd: 1,
+	// basic setup
+	type: \cln,
+	snd: \cross,
+
+	rps: Pstutter(Pfunc({~rps}).reciprocal, Pfunc({~rps}).reciprocal, inf), 
+	dur: Pstutter(Pkey(\rps), Pkey(\rps).reciprocal, inf), 
+	num: Pstutter(Pkey(\rps), Pwrand2([[0, 9],  [1, 7],  [12, 14, 16]], [3, 3,  9], inf), inf),
+//	num: [1, 7, 14], 
+	lpf: 4000, 
+	lhf: 0.25, 
+	hpf: 25, 
+	dst: 0.2, 
+	lag: 1/2, 
+	crv: -8, 
+	atk: 1/6, 
+	hld: 8/3, 
+	rel: 1/3, 
+	degree: Pstutter(Pkey(\rps), Pshuf((-8, -6 .. 8), 3), inf), 
+	scale: Scale.harmonicMinor, 
+
+	// common parameters
+	legato: Pkey(\rps)+1,
+	sustain: 1, 
+	amp: Pexprand(0.35, 0.45),
+	spd: 1, 
+	pan: Pwhite(0.00, 1.0), 
     ])
-);
-
-Pdef(\004,
-    Pbind(*[
-        type: \cln,
-        snd: \metro,
-	dur: 110,
-	amp: 11, // it's kinda quite
-     ])
 ).play(quant:1);
 
-Pdef(\005,
+
+Pdef(3,
     Pbind(*[
         type: \cln,
-        snd: \metro,
-	bgn: 0.55,
-	end: 0.9,
-	dur: 43,
-	amp: 11, // it's kinda quite
-     ])
-);
+        snd: \hat,
+        amp: Pstutter(Pexprand(1, 3), Pexprand(1.5, 3.5)),
+        dur: 4,
+        lhf: Pexprand(0.15, 0.25),
+        hpf: 400,
+    ])  
+).play(quant: 1); 
 
 
-// fire blazin' on a monitor
-Pdef(\002,
-    Pbind(*[
-        type: \cln,
-	ton: Pseq([0.4], inf).trace,
-        snd: \wah,
-        num: 0,
-	spd: Pexprand(Pkey(\ton), Pkey(\ton)+0.01),
-	shp: 0.8,
-	dst: 0.77,
-	detune: 1.5,
-	dur: 1/50,
-	crv: -8,
-	hpq: 0.5,
-        amp: 0.3,
-	lpf: 800,
-    ])
-);
-
-// water pouring profusely through a faucet onto a stainless steal sink
-// via black and white footage
-Pdef(\003,
-    Pbind(*[
-        type: \cln,
-	ton: Pseq([2.8,1.5,1.2,0.8], inf),
-        snd: \wah,
-        num: 0,
-	spd: Pexprand(Pkey(\ton), Pkey(\ton)+0.01),
-	shp: 0.8,
-	dst: 0.77,
-	detune: 1.5,
-	dur: 1/50,
-	crv: -8,
-	hpq: 0.5,
-        amp: 0.3,
-	lpf: 800,
-    ])
-);
-);
-
-
-
-
-Pdef(\001).play;
-Pdef(\001).stop;
-
-(
-Pdef(\003).play;
-Pdef(\002).stop;
 )
-(
-Pdef(\002).play;
-Pdef(\003).stop;
-)
+
+Scale.directory
