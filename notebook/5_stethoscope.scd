@@ -11,49 +11,56 @@
     Inspired by the new harmonica I got which can connect to a stethoscope!
 
 */ 
+d = DayTimer(\today);
+Quarks.gui
+Quarks.install("https://github.com/supercollider-quarks/DayTimer"); 
 
 // Controllers
 Pdef(\002).play(quant:1); 
-Pdef(\001).stop; 
+Pdef(\004).stop; 
+Quarks.install("https://github.com/supercollider-quarks/Bjorklund");
+~clean.modules;
 
 Scale.directory;
 (
-Pdef(\001, 
+Pdef(\004, 
     Pbind(*[
 	// basic setup
-	type: \cln,
+	type: Pwrand2([\cln, \r], [1, 2], inf),
+//	type: \cln, 
 	snd: \stethoscope,
 //	num: Pwhite(0, 6), 
-//	num: Prand([[0], [1], [2], [0, 1], [0, 2], [1, 2]], inf), 
-	num: Prand([[0], [1], [2], [4], [5], [6], [0, 1], [0, 2], [1, 2], [0, 1, 5], [0, 1, 6], [5, 6], [4, 6]], inf), 
+	num: Prand([[0], [1], [2]], inf), 
+//	num: Prand([[0], [1], [2], [4], [5], [6], [0, 1], [0, 2], [1, 2], [0, 1, 5], [0, 1, 6], [5, 6], [4, 6]], inf), 
 //	num: [6], 
 
 	// common parameters
-	dur: Plprand(0.3, 8.0), 
-	amp: Pexprand(0.2, 0.55).trace, 
-	amp: 0.4, 
-	atk: 4, 
-	hld: 3, 
-	rel: 10, 
+	dur: Plprand(0.1, 8.0), 
+	amp: Pexprand(0.3, 0.5), 
+	atk: Pwhite(5, 15), 
+	hld: 0, 
+	rel: Pwhite(5, 15), 
+
 	hal: 4, 
 	rts: 3, 
-	hpf: Pwhite(0, 300), 
+	hpf: Pwhite(30, 300), 
         scale: Scale.mixolydian,
 	pan: Pwhite(0.0, 1.0), 
 	degree: Pwhite(-28, -14), 
 //	ocu: Pwhite(0, 2).trace, 
-	ocu: 2, 
+//	ocu: 2, 
 	spd: Pn(Plazy { 
 		Pif(Pkey(\hpf) > 225, (1.0, 1.0001 .. 1.003), [1]);
 	}), 
 	bgn: Pwhite(0.0, 0.2), 
-	fsh: Pseg(Pwhite(-32,32), Plprand(0.5, 5.0), \sin, inf), 
+//	fsh: Pseg(Pwhite(-32,32), Plprand(0.5, 5.0), \sin, inf), 
 //	fsm: Pseg(Pwhite(4.0, -4.0), Plprand(0.5, 5.0), \sin, inf) , 
+	aux: 0, 
 	sustain: 20, 
     ])
 ).play(quant:1);
 
-Pdef(\002, 
+Pdef(\003, 
 	Pseed(222, 
     Pbind(*[
 	// basic setup
