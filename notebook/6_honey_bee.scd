@@ -23,7 +23,7 @@ Pdef(\002).stop;
 
 (
 Pdef(\001, 
-    Pbind(*[
+    Pbind(*[	    
 	// basic setup
 	type: \cln,
 	snd: \octaves,
@@ -63,9 +63,9 @@ Pdef(\002,
 	aux: 1, 
 	pan: Pwhite(0.0, 1.0), 
 
-])
-);
-	)
+        ])
+    );
+)
 
 
     
