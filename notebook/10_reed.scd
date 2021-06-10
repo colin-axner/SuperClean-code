@@ -1,52 +1,50 @@
-(
-~clean.loadSoundFiles("~/music/samples/")
-)
-
 /*
-Inspired by ...
+    Spent some time tinkering with the reed SynthDef. Got something going. 
+    The other patterns kinda go with the reed SynthDef, not entirely. They use the same format, so it works.
+    Unfinished. Need to try adding more parameters to control the 'reed'
 
+    No samples needed!
 */ 
 
-// Controllers
-Pdef(\001).play(quant:1); 
+// controllers
+Pdef(\001).play(quant:1); // plays automatically
 Pdef(\001).stop; 
-Pdef(\003).play(quant:1); 
+Pdef(\003).play(quant:1); // add when ready
 Pdef(\003).stop; 
-Pdef(\004).play(quant:1); 
+Pdef(\004).play(quant:1); // add when ready
 Pdef(\004).stop; 
-
-
-
-
 
 (
 Pdef(\001, 
     Pbind(*[
         type: \cln,
-        snd: 'reed',
+        snd: 'reed', // initialize the synth at the bottom of this file first
 
         dur: Pwhite(5, 10), 
         legato: Pwhite(5, 10), 
         atk: Pwhite(10, 15),
         hld: 0, 
         rel: Pwhite(1, 5),
-        lpf: Pwhite(500, 2000), 
-        //        lpf: 2000, 
         crv: -8, 
-        amp: Plprand(0.4, 0.5), 
+        lpf: Pwhite(500, 2000), 
+        //        lpf: 2000,
+
+        //        amp: Plprand(0.4, 0.5), 
+        amp: Pseg(Pbrown(-15.dbamp, -0.1.dbamp, 1.dbamp, inf), Plprand(15.0, 30.0), \sin, inf),
+        lhf: Pseg(Phprand(0.1, 0.5), Plprand(15.0, 45.0), \exp, inf),
 
         degree: Prand([[-7, -3, 0, 2], [-7, -2, 0, 3], [-7, -1, 1, 4]], inf) * Pbrown(Pwhite(-5, 0), Pwhite(2, 8), 1, inf) * (1.0, 1.0005 .. 1.002),
         // degree: [-7, -3, 2, 0] * Pwhite(-2, 7), 
         // ocu: Pwhite(0.0, 4), 
         // ocd: Pwhite(0.0, 2), 
-
         dark: 0.6, 
     ])
 ).play(quant:1);
+
 Pdef(\003, 
     Pbind(*[
         type: \cln,
-        snd: Pwrand2(['sin', 'r'], [1, 3], inf),
+        snd: Pwrand2(['sin', 'r'], [1, 3], inf), // increase/decrease rest probability
 
         dur: 1/3, 
         legato: Pwhite(2, 10), 
@@ -55,10 +53,11 @@ Pdef(\003,
         rel: 0.2,
         crv: -8, 
         amp: Pseg(Pwhite(0.4, 0.6), Pwhite(10, 20), \sin, inf), 
+        amp: Pseg(Pbrown(-9.dbamp, -0.1.dbamp, 1.dbamp, inf), Plprand(1.0, 5.0), \sin, inf),
 
         rest: 0, 
         sh:Pwhite(0.0, 13), 
-        fsh: Pwrand2([Pkey('rest'), Pkey('sh')], [3, 1],  inf),
+        fsh: Pwrand2([Pkey('rest'), Pkey('sh')], [2, 1],  inf),
         fsm: Pkey('fsh') / Pwhite(3, 5), 
 
         degree: [-7, -3, 2, 0]*Pbrown(Pwhite(-5, 0), Pwhite(2, 12), 1, inf),
@@ -66,6 +65,7 @@ Pdef(\003,
         pan: Pwhite(0.0, 1.0), 
     ])
 );
+
 Pdef(\004, 
     Pbind(*[
         type: \cln,
@@ -78,7 +78,8 @@ Pdef(\004,
         rel: 0.2,
         crv: -8, 
         amp: Pseg(Pwhite(0.05, 0.1), Pwhite(10, 20), \sin, inf), 
-
+        amp: Pseg(Plprand(-20.dbamp, -10.dbamp), Plprand(1.0, 5.0), \sin, inf),
+        fed: Pwhite(0.01, 0.1), 
 
         rest: 0, 
         sh:Pwhite(0.0, 13), 
@@ -91,8 +92,6 @@ Pdef(\004,
     ])
 );
 )
-
-
 
 // http://sccode.org/1-51m with very small modifications
 (
