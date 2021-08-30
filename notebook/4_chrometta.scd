@@ -38,13 +38,13 @@ Pdef(\002,
 	num: [17], // 3, 4, 5, 7s, 8s, 10s, 14, 20, 21, 22 // no good - 6
 
 	// common parameters
-	dur: Pstutter(Pexprand(1, 9), Prand([1/3, 1/6, 1/9, 1/12, 1/16], inf), inf), 
+	dur: Pdup(Pexprand(1, 9), Prand([1/3, 1/6, 1/9, 1/12, 1/16], inf), inf), 
 //	degree: Pwhite(-5, 5), 
 	atk: 0.1, 
 //	dst: Pwrand2([0.05, 0], [1, 5], inf), 
 //	hpf: 100, 
 	ctv: -8, 
-	pan: Pstutter(3, Pwhite(0.0, 1.0), inf), 
+	pan: Pdup(3, Pwhite(0.0, 1.0), inf), 
 	hld: 1, 
 	rel: 1, 
 	sustain: 20, 
@@ -53,7 +53,7 @@ Pdef(\002,
 //	hal: 1, 
 	bgn: 0.05, 
 	legato:1, 
-	spd: Pstutter(Pwhite(1, 3), Prand([0.25, 0.5, 0.75,1], inf), inf) + Pwhite(0.0, 0.013), 
+	spd: Pdup(Pwhite(1, 3), Prand([0.25, 0.5, 0.75,1], inf), inf) + Pwhite(0.0, 0.013), 
     ])
     )
 ).play(quant:1);

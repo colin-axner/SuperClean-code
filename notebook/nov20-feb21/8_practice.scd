@@ -28,8 +28,8 @@ Pdef(\001,
 	cu1: 10, 
 	legato: 2, 
 	sustain: 2, 
-//	spd: Pstutter(24, Pexprand(0.4, 2), inf), 
-	dst: Pstutter(24, Pwrand2([0, 0.3], [10, 1], inf), inf), 
+//	spd: Pdup(24, Pexprand(0.4, 2), inf), 
+	dst: Pdup(24, Pwrand2([0, 0.3], [10, 1], inf), inf), 
     ])
 ).play();
 )

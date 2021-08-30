@@ -13,15 +13,15 @@ Inspired by ...
 
 // Controllers
 Pdef(\002).play(quant:1); 
-Pdef(\002).stop; 
+Pdef(\01).stop; 
 
 (
-Pdef(\001, 
+Pdef(\01, 
     Pbind(*[
         // basic setup
         type: Pwrand2([\cln, \r], [1, 1], inf) ,
         snd: \bowl,
-        num: Pwhite(1, 7).trace, 
+        num: Pwhite(1, 7), 
 
         // common parameters
         dur: Pwhite(0.3, 20), 
@@ -29,14 +29,13 @@ Pdef(\001,
         hld: 0, 
         rel: Pwhite(20, 50), 
         legato: 7, 
-        //	hal: 1, 
-        //	rts: 2, 
-        dark: 0.5, 
-        pan: Pwhite(0.0, 1.0), 
 
-        spd: Pwhite(0.1, 2.0).trace,
-        amp: Phprand(1, 1.5) 
-        / Pkey(\spd).linlin(0.1, 2.0, 1.0, 1.5),  
+        dark: 0.6, 
+//        pan: Pwhite(0.0, 1.0), 
+
+        spd: Pwhite(0.1, 2.0),
+        amp: Pseg(Pbrown(-10.dbamp, 2.dbamp, 0.5.dbamp, inf), Plprand(5.0, 10.0), \sin, inf), 
+//            * Pkey(\spd).linlin(0.1, 2.0, 1.0, 1.5),  
         aux: 2, 
     ])
 ).play(quant:1);
@@ -67,7 +66,7 @@ Pdef(0,
             type: \cln,
             snd: \bowl,
             num: 1, 
-            spd: Plprand(1/4, 7.0).round(1/7).trace,
+            spd: Plprand(1/4, 7.0).round(1/7),
             dur: Phprand(10.0, 20.0),
             amp: Plprand(0.1, 0.9) 
             / Pkey(\spd).linexp(1/4, 7.0, 0.5, 6.0) / 2.25,

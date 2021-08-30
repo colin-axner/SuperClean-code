@@ -50,7 +50,7 @@ Pdef(\003,
 	// common parameters
 	dur: Pseq([1/6, 11/6], inf),  
 //	legato: 5, 
-	tun: Pstutter(12, Pwhite(0, 7)), 
+	tun: Pdup(12, Pwhite(0, 7)), 
 	amp: 0, 
     ])
     )

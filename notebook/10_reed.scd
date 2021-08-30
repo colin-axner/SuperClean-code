@@ -1,10 +1,23 @@
-/*
-    Spent some time tinkering with the reed SynthDef. Got something going. 
-    The other patterns kinda go with the reed SynthDef, not entirely. They use the same format, so it works.
-    Unfinished. Need to try adding more parameters to control the 'reed'
-
-    No samples needed!
-*/ 
+// http://sccode.org/1-51m with very small modifications
+(
+SynthDef(\reed, {
+    |out = 0, freq = 440, amp = 0.1, gate = 1, attack = 0.3, release = 0.3, ebr = 3, ebm = 0.1, mwr = 0.06, mwm = 0.1|
+    var snd, blow;
+    // pulse with modulating width
+    snd = Pulse.ar((Rand(-0.06, 0.05) + freq.clip(20, 20000).cpsmidi).midicps, 0.48 + LFNoise1.kr(mwr, mwm), 0.2);
+    //          add a little "grit" to the reed
+    //          snd = Disintegrator.ar(snd, 0.3, 0.9);
+    // a little ebb and flow in volume
+    snd = snd * LFNoise2.kr(ebr, ebm, 1);
+    // use the same signal to control both the resonant freq and the amplitude
+    blow = EnvGen.ar(Env.asr(attack, 1.0, release), gate, doneAction: 2);
+    snd = snd + BPF.ar(snd, blow.linexp(0, 1, 2000, 2442), 0.3, 3);
+    // boost the high end a bit to get a buzzier sound
+    //          snd = BHiShelf.ar(snd, 1200, 1, 3);
+    snd = snd * blow;
+    Out.ar(out, Pan2.ar(snd, 0, amp));
+}).add;
+) 
 
 // controllers
 Pdef(\001).play(quant:1); // plays automatically
@@ -20,27 +33,31 @@ Pdef(\001,
         type: \cln,
         snd: 'reed', // initialize the synth at the bottom of this file first
 
-        dur: Pwhite(5, 10), 
+        dur: Pwhite(3, 12), 
         legato: Pwhite(5, 10), 
         atk: Pwhite(10, 15),
         hld: 0, 
         rel: Pwhite(1, 5),
         crv: -8, 
-        lpf: Pwhite(500, 2000), 
-        //        lpf: 2000,
 
-        //        amp: Plprand(0.4, 0.5), 
-        amp: Pseg(Pbrown(-15.dbamp, -0.1.dbamp, 1.dbamp, inf), Plprand(15.0, 30.0), \sin, inf),
+        amp: Pseg(Pbrown(-13.dbamp, -1.dbamp, 0.25.dbamp, inf), Plprand(5.0, 10.0), \sin, inf),
         lhf: Pseg(Phprand(0.1, 0.5), Plprand(15.0, 45.0), \exp, inf),
 
-        degree: Prand([[-7, -3, 0, 2], [-7, -2, 0, 3], [-7, -1, 1, 4]], inf) * Pbrown(Pwhite(-5, 0), Pwhite(2, 8), 1, inf) * (1.0, 1.0005 .. 1.002),
-        // degree: [-7, -3, 2, 0] * Pwhite(-2, 7), 
-        // ocu: Pwhite(0.0, 4), 
-        // ocd: Pwhite(0.0, 2), 
+        degree: Prand([[-7, -3, 0, 2], [-7, -2, 0, 3], [-7, -1, 1, 4]], inf) 
+            * Pbrown(Pwhite(-5, 0), Pwhite(2, 8), 1, inf) 
+            * (1.0, 1.0005 .. 1.002),
+
+        r: (Pwhite(1, 10) * 3).trace, 
+        ebr: Pkey('r'), 
+        ebm: (Pwhite(1, 200) / 1000), 
+        mwr: Pkey('r') , 
+        mwm: (Plprand(1, 200) / 1000), 
+        mwm: Pseg(Plprand(0.001, 0.3), 1, \wel, inf),
+
         dark: 0.6, 
+        pan: Pwhite(0.0, 1.0), 
     ])
 ).play(quant:1);
-
 Pdef(\003, 
     Pbind(*[
         type: \cln,
@@ -57,15 +74,15 @@ Pdef(\003,
 
         rest: 0, 
         sh:Pwhite(0.0, 13), 
-        fsh: Pwrand2([Pkey('rest'), Pkey('sh')], [2, 1],  inf),
+        fsh: Pwrand2([Pkey('rest'), Pkey('sh')], [4, 1],  inf),
         fsm: Pkey('fsh') / Pwhite(3, 5), 
 
         degree: [-7, -3, 2, 0]*Pbrown(Pwhite(-5, 0), Pwhite(2, 12), 1, inf),
+
         dark: 0.6, 
         pan: Pwhite(0.0, 1.0), 
     ])
 );
-
 Pdef(\004, 
     Pbind(*[
         type: \cln,
@@ -93,50 +110,12 @@ Pdef(\004,
 );
 )
 
-// http://sccode.org/1-51m with very small modifications
-(
-SynthDef(\reed, {
-    |out = 0, freq = 440, amp = 0.1, gate = 1, attack = 0.3, release = 0.3|
-    var snd, blow;
-    // pulse with modulating width
-    snd = Pulse.ar((Rand(-0.06, 0.05) + freq.clip(20, 20000).cpsmidi).midicps, 0.48 + LFNoise1.kr(0.06, 0.1), 0.2);
-    // add a little "grit" to the reed
-    //        snd = Disintegrator.ar(snd, 0.3, 0.9);
-    // a little ebb and flow in volume
-    snd = snd * LFNoise2.kr(3, 0.1, 1);
-    // use the same signal to control both the resonant freq and the amplitude
-    blow = EnvGen.ar(Env.asr(attack, 1.0, release), gate, doneAction: 2);
-    snd = snd + BPF.ar(snd, blow.linexp(0, 1, 2000, 2442), 0.3, 3);
-    // boost the high end a bit to get a buzzier sound
-    // snd = BHiShelf.ar(snd, 1200, 1, 3);
-    snd = snd * blow;
-    Out.ar(out, Pan2.ar(snd, 0, amp));
-}).add;
-) 
+/*
+    Spent some time tinkering with the reed SynthDef. Got something going. 
+    The other patterns kinda go with the reed SynthDef, not entirely. They use the same format, so it works.
+    Unfinished. Need to try adding more parameters to control the 'reed'
 
-// original
-// http://sccode.org/1-51m
-(
-SynthDef(\organ_reed, {
-    //Reed Organ Simulation
-    |out = 0, freq = 440, amp = 0.1, gate = 1, attack = 0.3, release = 0.3|
-    var snd, blow;
-    freq = freq.clip(20, 20000);
-    // pulse with modulating width
-    snd = Pulse.ar((Rand(-0.03, 0.05) + freq.cpsmidi).midicps, 0.48 + LFNoise1.kr(0.06, 0.1), 0.2);
-    // add a little "grit" to the reed
-    snd = Disintegrator.ar(snd, 0.5, 0.7);
-    // a little ebb and flow in volume
-    snd = snd * LFNoise2.kr(5, 0.05, 1);
-    // use the same signal to control both the resonant freq and the amplitude
-    blow = EnvGen.ar(Env.asr(attack, 1.0, release), gate, doneAction: 2);
-    snd = snd + BPF.ar(snd, blow.linexp(0, 1, 2000, 2442), 0.3, 3);
-    // boost the high end a bit to get a buzzier sound
-    snd = BHiShelf.ar(snd, 1200, 1, 3);
-    snd = snd * blow;
-    Out.ar(out, Pan2.ar(snd, 0, amp));
+    No samples needed!
+*/ 
 
-    //By Nathan Ho aka Snappizz
-    //http://sccode.org/1-51m
-}).add;
-)
+

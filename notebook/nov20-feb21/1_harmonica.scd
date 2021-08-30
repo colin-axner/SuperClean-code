@@ -39,7 +39,7 @@ Pdef(\001,
         num: Pseq([0,1,2,3,5], inf),
 	scale: Scale.harmonicMinor,
 	degree: -8, // switch to -8 after train passes
-        dur: Pwrand([1/Pstutter(4, Pseq([12,16,20], inf)), Rest(1/8)], [1,1].normalizeSum, inf),
+        dur: Pwrand([1/Pdup(4, Pseq([12,16,20], inf)), Rest(1/8)], [1,1].normalizeSum, inf),
         lpf: Pseq([Pseries(150,2,100), Pseries(350, -2, 100)], inf).trace,
         hpf: Pkey(\lpf),
         dlf: 0.94,
