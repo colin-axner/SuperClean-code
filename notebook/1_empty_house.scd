@@ -1,73 +1,80 @@
 (
-~clean.loadSoundFiles("/home/bartleby/music/samples/emptyhouse")
+~clean.loadSoundFiles("/home/bartleby/music/samples/emptyhouse") // this is ok to change
 )
 
 /*
-    Inspired by https://www.plasbodfa.com/sounds-for-an-empty-house-open-call
-    recording in folder #3
+Initial inspiration https://www.plasbodfa.com/sounds-for-an-empty-house-open-call
+recording in folder #3 was used for construction of the piece.
 
+Composition is intended for any field recording of any length. 
 */ 
-
-// Controllers
-Pdef(\001).play(quant:1); 
-
+(
 Pdef(\001).stop; 
 Pdef(\002).stop; 
+)
 
 (
+~dup = Pbrown(5, 13, Prand((2, 4 .. 8), inf), inf).asStream;
+~amp = Pexprand(1.dbamp, 5.dbamp).asStream;  // this is ok to change
+
+
 Pdef(\001, 
-
-    Pdup(Pwhite(1, 10),
+    Pdup(Pseq([~dup, 1], inf),
     Pbind(*[
-	// basic setup
-	type: Pseq([\cln], inf), 
-    snd: \emptyhouse,
-	num: 0, 
-    bgn: Pwhite(0.5, 1.0),
-    legato: 5, 
+        type: Pseq([\cln, \r], inf), 
+        snd: \emptyhouse,
+        bgn: Pwhite(0.5, 1.0), // this is ok to change
 
-	// common parameters
-	dur: 5 / Pwhite(1, 10), 
-    atk: 1, 
-    hld: 1, 
-    rel: 1, 
-	spd: 0.25, 
-    hpf: 20, 
 
-    amp: 3.dbamp, 
+        dur: (Pwhite(0.5, 5) / ~dup * 6).trace, 
+        atk: Pwhite(0.1, 4), 
+        hld: 0.001, 
+        rel: Pwhite(0.5, 4), 
+        crv: -8, 
+        spd: Pexprand(0.25, 1), 
 
-    dark: 1, 
+
+        amp: ~amp,
+        dla: 0.1, 
+        legato: Pkey(\dur).linlin(0.5, 5, 20, 2),
+
+
+        hpf: Pwhite(0, 50), 
+        lpf: Pwhite(1000, 20000), 
+        dst: Pwhite(0.00001, 0.06) * Pwrand2([0, 1], [4, 1], inf),  
+
+
+        cav: 0.792834, 
+        cvd: 0.5, 
     ])
 )).play(quant:1);
 
-
-
 Pdef(\002, 
     Pbind(*[
-	// basic setup
-	type: \cln,
-    snd: \emptyhouse,
-	num: 0, 
-    bgn: Pwhite(0.5, 1.0),
-    legato: 5, 
-
-	// common parameters
-	dur: Pwhite(1, 15), 
-    atk: Pwhite(1, 5), 
-    hld: 4, 
-    rel: Pkey(\atk),
-    crv: -8, 
-	spd: Pwhite(0.5, 5) * Prand([1, -1], inf), 
-    fsh: Pwhite(1, 10), 
-    fsm: Pwhite(1, 4), 
+        type: \cln,
+        snd: \emptyhouse,
+        bgn: Pwhite(0.5, 1.0), // this is ok to change
 
 
-    amp: Pexprand(-6.dbamp, 0.dbamp), 
+        dur: ~dup * Pwhite(0.5, 1), 
+        atk: Pwhite(1, 5), 
+        hld: 4, 
+        rel: Pkey(\atk),
+        crv: -8, 
+        spd: Pwhite(0.25, 10) * Pwrand2([1, -1], [4, 1], inf), 
 
-    pan: Pwhite(0.0, 1.0), 
-    dark: 1, 
+
+        amp: ~amp, 
+        legato: 10, 
+
+        fsh: Pwhite(1, 10), 
+        fsm: Pwhite(1, 4), 
+
+
+        pan: Pseg(Pwhite(0.0, 1.0), 5, \wel, inf), 
+        cav: 0.792834, 
+        cvd: 0.5, 
     ])
 ).play(quant:1);
-
 )
 
