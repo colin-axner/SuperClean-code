@@ -3,6 +3,9 @@
 (
 ~clean.loadSoundFiles("~/music/samples/harmonica/turbotwenty");
 ~clean.loadSoundFiles("~/music/samples/harmonica/stethoscope");
+~clean.loadSoundFiles("~/music/samples/harmonica/marineband/a/octaves");
+~clean.loadSoundFiles("~/music/samples/harmonica/marineband/a/cross");
+~clean.loadSoundFiles("~/music/samples/harmonica/special20/c/growl");
 ~clean.loadSoundFiles("~/music/samples/harmonica/chrometta");
 ~clean.loadSoundFiles("~/music/samples/guitar/ebow");
 )
@@ -17,50 +20,52 @@ Quarks.install("https://github.com/supercollider-quarks/DayTimer");
 
 // Controllers
 Pdef(\002).play(quant:1); 
-Pdef(\004).stop; 
+Pdef(\0040).stop; 
 Quarks.install("https://github.com/supercollider-quarks/Bjorklund");
 ~clean.modules;
 
 Scale.directory;
 (
-Pdef(\004, 
+Pdef(\0040, 
     Pbind(*[
         // basic setup
         type: Pwrand2([\cln, \r], [1, 0], inf),
         //	type: \cln, 
-        snd: \stethoscope,
-        //	num: Pwhite(0, 6), 
-        num: Prand([[0], [1], [2]], inf), 
-        //	num: Prand([[0], [1], [2], [4], [5], [6], [0, 1], [0, 2], [1, 2], [0, 1, 5], [0, 1, 6], [5, 6], [4, 6]], inf), 
+        snd: Prand([\stethoscope ], inf).trace, 
+ //       num: Prand([[0], [1], [2]], inf), 
+//             num: [Pwhite(0,23)],
+        	num: Prand([[0], [1], [2], [4], [5], [6], [0, 1], [0, 2], [1, 2], [0, 1, 5], [0, 1, 6], [5, 6], [4, 6]], inf).trace, 
         //	num: [6], 
 
         // common parameters
         dur: Plprand(0.1, 8.0), 
         amp: Pexprand(0.3, 0.5), 
-        atk: Pwhite(5, 15), 
+        amp: Pseg(Pbrown(-5.dbamp, 1.dbamp, 0.5.dbamp, inf), Plprand(5.0, 10.0), \sin, inf),
+         atk: Pwhite(5, 15), 
         hld: 0, 
         rel: Pwhite(5, 15), 
 
-        hal: 4, 
-        rts: 3, 
-        hpf: Pwhite(30, 300), 
+//        hal: 4, 
+//        rts: 3, 
+        hpf: Pwhite(30, 300).trace, 
         scale: Scale.mixolydian,
         pan: Pwhite(0.0, 1.0), 
         degree: Pwhite(-28, -14), 
         //	ocu: Pwhite(0, 2).trace, 
         //	ocu: 2, 
         spd: Pn(Plazy { 
-            Pif(Pkey(\hpf) > 225, (1.0, 1.0001 .. 1.003), [1]);
+            Pif(Pkey(\hpf) > 235, (1.0, 1.0001 .. 1.003), [1]);
         }), 
         bgn: Pwhite(0.0, 0.2), 
         //	fsh: Pseg(Pwhite(-32,32), Plprand(0.5, 5.0), \sin, inf), 
         //	fsm: Pseg(Pwhite(4.0, -4.0), Plprand(0.5, 5.0), \sin, inf) , 
         aux: 0, 
+        cav: 0.5,
         sustain: 20, 
     ])
 ).play(quant:1);
 
-Pdef(\003, 
+Pdef(\0030, 
     Pseed(222, 
         Pbind(*[
             // basic setup
