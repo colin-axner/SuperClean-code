@@ -54,7 +54,7 @@ Pdef(\001,
         mwm: (Plprand(1, 200) / 1000), 
         mwm: Pseg(Plprand(0.001, 0.3), 1, \wel, inf),
 
-        dark: 0.6, 
+        cav: 0.6, 
         pan: Pwhite(0.0, 1.0), 
     ])
 ).play(quant:1);
@@ -104,7 +104,7 @@ Pdef(\004,
         fsm: Pkey('fsh') / Pwhite(3, 5), 
 
         degree: [-7, -3, 2, 0]*Pbrown(Pwhite(-5, 0), Pwhite(2, 12), 1, inf),
-        dark: 0.6, 
+        ca: 0.6, 
         pan: Pwhite(0.0, 1.0), 
     ])
 );
